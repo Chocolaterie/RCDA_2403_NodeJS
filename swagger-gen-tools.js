@@ -6,7 +6,7 @@ const doc = {
         title: 'TP Article',
         description : 'La documentation TP Article',
     },
-    host: 'localhost:3000',
+    host: '127.0.0.1:3000',
     basePath: '/',
     schemes: ['http'],
     components: {
