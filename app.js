@@ -10,6 +10,8 @@ const JWT_SECRET = "chocolatine";
 const app = express();
 
 // pour autoriser l'envoie des données dans le body 
+const cors = require('cors');
+app.use(cors());
 app.use(express.json());
 
 // ----------------------------------------------------------
