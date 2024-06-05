@@ -13,7 +13,8 @@
   "paths": {
     "/auth": {
       "post": {
-        "description": "Se connecter à l'aide d'un email et d'un mdp pour avoir un token",
+        "summary": "Url de connexion",
+        "description": "Se connecter à l'aide d'un email et mot de passe pour avoir un token",
         "responses": {
           "default": {
             "description": ""
@@ -48,12 +49,12 @@
         }
       }
     },
-    "/article/{uid}": {
+    "/article/{id}": {
       "get": {
         "description": "",
         "parameters": [
           {
-            "name": "uid",
+            "name": "id",
             "in": "path",
             "required": true,
             "schema": {
@@ -66,6 +67,36 @@
             "description": ""
           }
         }
+      },
+      "delete": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
       }
     },
     "/save-article": {
@@ -113,38 +144,6 @@
             }
           }
         }
-      }
-    },
-    "/article/{id}": {
-      "delete": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "authorization",
-            "in": "header",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ]
       }
     }
   },
