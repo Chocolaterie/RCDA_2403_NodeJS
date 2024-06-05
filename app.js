@@ -2,6 +2,10 @@
 const express = require('express');
 const { v4: uuidv4 } = require('uuid');
 
+// JWT
+const jwt = require('jsonwebtoken');
+const JWT_SECRET = "chocolatine";
+
 // instancier le serveur
 const app = express();
 
@@ -29,6 +33,9 @@ mongoose.connect('mongodb://127.0.0.1:27017/db_article');
 // Model Article
 const Article = mongoose.model('Article', { id: String, title : String, content : String, author : String }, 'articles');
 
+// Model User
+const User = mongoose.model('User', { email : String, password : String }, 'users');
+
 /**
  * Réponse métier refactorisé
  * @param {*} response 
@@ -48,7 +55,52 @@ function performReponseAPI(response, code, message, data) {
     });
 }
 
-// Routes
+// ----------------------------------------------------------
+// * Middleware
+// ----------------------------------------------------------
+async function checkTokenMiddleware(request, response, next) {
+    // si pas de token envoyé (erreur)
+    if (!request.headers.authorization){
+        return performReponseAPI(response, "798", "Token obligatoire");
+    }
+
+    // extraire le token (qui est bearer)
+    const token = request.headers.authorization.substring(7);
+
+    // verifier la validité
+    let result = null;
+
+    try {
+        result = await jwt.verify(token, JWT_SECRET);
+    } catch (e) {}
+
+    if(!result){
+        return performReponseAPI(response, "799", "Token invalide ou expiré");
+    }
+
+    // on passe le middleware/on passe le mur
+    return next();
+}
+
+// Configuer des routes
+app.post('/auth', async (request, response) => {
+    // Tester que le couple email/password existe
+    const loggingRequest = request.body;
+
+    const loggedUser = await User.findOne({ email: loggingRequest.email, password : loggingRequest.password });
+
+    // Si erreur 
+    if (!loggedUser){
+        return performReponseAPI(response, '703', `Couple email/mot de passe incorrect`, null);
+    }
+
+    // generer un token
+    const token = jwt.sign({ email : loggedUser.email }, JWT_SECRET, { expiresIn : '1h' });
+
+    // retourne la réponse avec le token
+    return performReponseAPI(response, '203', `Authentifié(e) avec succès`, token);
+});
+
 app.get('/articles', async (request, response) => {
 
     // récupérer les articles en base
@@ -76,7 +128,7 @@ app.get('/article/:id', async (request, response) => {
 /**
  * Ajouter/modifier un article
  */
-app.post('/save-article', async (request, response) => {
+app.post('/save-article', checkTokenMiddleware, async (request, response) => {
     // Si id renseigné
     if (request.body.id){
         // Si edition
@@ -132,7 +184,7 @@ app.post('/save-article', async (request, response) => {
 /**
  * Supprimer un article
  */
-app.delete('/article/:id', async (request, response) => {
+app.delete('/article/:id', checkTokenMiddleware, async (request, response) => {
     // Recupérer l'id dans l'url
     const idParam = request.params.id;
 
@@ -140,7 +192,7 @@ app.delete('/article/:id', async (request, response) => {
     const articleToDelete = await Article.findOne({id : idParam});
 
     // Erreur : Pas d'article en base à supprimer
-    if (!articleToDelete){
+    if (!articleToDelete) {
         return performReponseAPI(response, "702", `Impossible de supprimer un article dont l'UID n'existe pas`, null);
     }
 
