@@ -9,6 +9,14 @@ const doc = {
     host: 'localhost:3000',
     basePath: '/',
     schemes: ['http'],
+    components: {
+        securitySchemes:{
+            bearerAuth: {
+                type: 'http',
+                scheme: 'bearer'
+            }
+        }
+    }
 };
 
 // Le chemin ou sera générée ta documentation swagger

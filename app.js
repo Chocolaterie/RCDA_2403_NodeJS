@@ -68,6 +68,12 @@ app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 // * Middleware
 // ----------------------------------------------------------
 async function checkTokenMiddleware(request, response, next) {
+    /* #swagger.security = [{
+            "bearerAuth": []
+    }] */
+
+    console.log(request.headers.authorization)
+
     // si pas de token envoyé (erreur)
     if (!request.headers.authorization){
         return performReponseAPI(response, "798", "Token obligatoire");
