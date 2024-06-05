@@ -56,6 +56,15 @@ function performReponseAPI(response, code, message, data) {
 }
 
 // ----------------------------------------------------------
+// * SWAGGER UI
+// ----------------------------------------------------------
+const swaggerUI = require('swagger-ui-express');
+// -- importer la doc swagger la doc swagger généré
+const swaggerDocument = require('./swagger-output.json');
+// utiliser le swagger
+app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
+
+// ----------------------------------------------------------
 // * Middleware
 // ----------------------------------------------------------
 async function checkTokenMiddleware(request, response, next) {
@@ -84,6 +93,11 @@ async function checkTokenMiddleware(request, response, next) {
 
 // Configuer des routes
 app.post('/auth', async (request, response) => {
+    /* 
+        #swagger.summary = 'Url de connexion'
+        #swagger.description = "Se connecter à l'aide d'un email et mot de passe pour avoir un token"
+    */
+
     // Tester que le couple email/password existe
     const loggingRequest = request.body;
 

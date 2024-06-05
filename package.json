@@ -12,6 +12,10 @@
     "express": "^4.19.2",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.4.1",
+    "swagger-ui-express": "^5.0.1",
     "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "swagger-autogen": "^2.23.7"
   }
 }
