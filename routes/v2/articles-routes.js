@@ -19,6 +19,9 @@ router.get('/get/:id', async (request, response) => {
     return response.json(responseService);
 });
 
+/**
+ * Ajouter/modifier un article
+ */
 router.post('/save', middlewares.checkTokenMiddleware, async (request, response) => {
 
     const responseService = await articleService.save(request.body.id, request.body);
@@ -27,6 +30,9 @@ router.post('/save', middlewares.checkTokenMiddleware, async (request, response)
 
 });
 
+/**
+ * Supprimer un article
+ */
 router.delete('/delete/:id', middlewares.checkTokenMiddleware, async (request, response) => {
     const responseService = await articleService.delete(request.params.id);
     

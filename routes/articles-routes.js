@@ -29,9 +29,9 @@ router.get('/article/:id', async (request, response) => {
     return response.json(responseService);
 });
 
-/**
- * Ajouter/modifier un article
- */
+/** 
+ * @deprecated Since version 2.0.0. Use `/v2/articles/save` instead.
+*/
 router.post('/save-article', middlewares.checkTokenMiddleware, async (request, response) => {
 
     const responseService = await articleService.save(request.body.id, request.body);
@@ -39,9 +39,10 @@ router.post('/save-article', middlewares.checkTokenMiddleware, async (request, r
     return response.json(responseService);
 });
 
-/**
- * Supprimer un article
- */
+
+/** 
+ * @deprecated Since version 2.0.0. Use `/v2/articles/delete` instead.
+*/
 router.delete('/article/:id', middlewares.checkTokenMiddleware, async (request, response) => {
     
     const responseService = await articleService.delete(request.params.id);
