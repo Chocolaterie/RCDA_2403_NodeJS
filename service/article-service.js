@@ -4,16 +4,24 @@ const { v4: uuidv4 } = require('uuid');
 
 module.exports = {
 
+    /**
+     * Récupère tout les articles
+     * @returns ServiceResponseAPI
+     */
     getAll: async () => {
         // récupérer les articles en base
-        const articles = await Article.find();
+        const articles = await Article.find().populate("category");
 
         return helpers.performServiceReponseAPI("200", `La liste des articles a été récupérés avec succès`, articles)
     },
 
+    /**
+     * Récupère un article
+     * @returns ServiceResponseAPI
+     */
     getById: async (idParam) => {
         // Trouver un article dans la BDD selon l'id
-        const foundArticle = await Article.findOne({ id: idParam });
+        const foundArticle = await Article.findOne({ id: idParam }).populate("category").populate("tags");
 
         // Si je trouve pas d'article
         if (!foundArticle) {
@@ -24,6 +32,10 @@ module.exports = {
         return helpers.performServiceReponseAPI("200", `Article récupéré avec succès`, foundArticle);
     },
 
+    /**
+     * Save un article
+     * @returns ServiceResponseAPI
+     */
     save: async (id, article) => {
         // Si id renseigné
         if (id) {
@@ -77,6 +89,10 @@ module.exports = {
         return helpers.performServiceReponseAPI("200", `Article ajouté avec succès`, createdArticle);
     },
 
+    /**
+     * Delete un article
+     * @returns ServiceResponseAPI
+     */
     delete: async (idParam) => {
 
         // Trouver l'article à supprimer
