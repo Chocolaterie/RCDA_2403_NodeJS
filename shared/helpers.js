@@ -1,6 +1,19 @@
 const logger = require('./logger');
 
 module.exports = {
+
+    performServiceReponseAPI: (code, message, data) => {
+
+        // Nouvelle version
+        logger.info(`code : ${code} | message : ${message}`);
+
+        return {
+            code: code,
+            message: message,
+            data: data
+        };
+    },
+
     /**
      * Réponse métier refactorisé
      * @param {*} response 
@@ -9,18 +22,8 @@ module.exports = {
      * @param {*} data 
      * @returns 
      */
-    performReponseAPI : (response, code, message, data) => {
-        
-        // Ancienne version
-        //console.log(`code : ${code} | message : ${message}`);
-        
-        // Nouvelle version
-        logger.info(`code : ${code} | message : ${message}`);
-        
-        return response.json({ 
-            code : code,
-            message : message,
-            data : data
-        });
+    performReponseAPI: (response, code, message, data) => {
+
+        return response.json(module.exports.performServiceReponseAPI(code, message, data));
     }
 };

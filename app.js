@@ -27,8 +27,14 @@ app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 const authRoutes = require('./routes/auth-routes');
 const articleRoutes = require('./routes/articles-routes');
 
+// v1 obseletes
 app.use(authRoutes);
 app.use(articleRoutes);
+
+// v2
+const articleRoutesv2 = require('./routes/v2/articles-routes');
+
+app.use('/v2/article', articleRoutesv2);
 
 // Lancer l'application serveur dans un port
 app.listen(3000, () => {
