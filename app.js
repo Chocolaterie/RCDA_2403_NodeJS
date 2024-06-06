@@ -13,7 +13,7 @@ app.use(express.json());
 // Init mongo connection
 const initConnection = require('./mongoose/mongoose-config');
 initConnection();
-
+  
 // ----------------------------------------------------------
 // * SWAGGER UI
 // ----------------------------------------------------------

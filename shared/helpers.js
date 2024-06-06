@@ -1,3 +1,5 @@
+const logger = require('./logger');
+
 module.exports = {
     /**
      * Réponse métier refactorisé
@@ -9,7 +11,11 @@ module.exports = {
      */
     performReponseAPI : (response, code, message, data) => {
         
-        console.log(`code : ${code} | message : ${message}`);
+        // Ancienne version
+        //console.log(`code : ${code} | message : ${message}`);
+        
+        // Nouvelle version
+        logger.info(`code : ${code} | message : ${message}`);
         
         return response.json({ 
             code : code,
